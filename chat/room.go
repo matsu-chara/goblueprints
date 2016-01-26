@@ -1,6 +1,11 @@
 package main
 
-import "log"
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/websocket"
+)
 
 type room struct {
 	forward chan []byte
@@ -46,7 +51,7 @@ const (
 
 var upgrader = &websocket.Upgrader{ReadBufferSize: socketBufferSize, WriteBufferSize: socketBufferSize}
 
-func (r *room) ServeHTTP(w http.ResponseWrier, req *http.Request) {
+func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	socket, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
 		log.Fatal("ServeHTTP:", err)
