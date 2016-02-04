@@ -45,6 +45,10 @@ func main() {
 	)
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header()["Location"] = []string{"/chat"}
+		w.WriteHeader(http.StatusTemporaryRedirect)
+	})
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
