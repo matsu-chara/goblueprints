@@ -43,7 +43,7 @@ func main() {
 	gomniauth.WithProviders(
 		google.New("744730650722-d59t9ljuu4kne10q7qr6fje6f5i27gmo.apps.googleusercontent.com", "79kS5-Ujkwp_5G4gxwlUmGZ4", "http://localhost:8080/auth/callback/google"),
 	)
-	r := newRoom(UseGravatarAvatar)
+	r := newRoom(UseFileSystemAvatar)
 	r.tracer = trace.New(os.Stdout)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header()["Location"] = []string{"/chat"}
@@ -65,6 +65,7 @@ func main() {
 	http.Handle("/room", r)
 	http.Handle("/upload", &templateHandler{filename: "upload.html"})
 	http.HandleFunc("/uploader", uploaderHandler)
+	http.Handle("/avatars/", http.StripPrefix("/avatars/", http.FileServer(http.Dir("./avatars"))))
 	go r.run()
 
 	log.Println("Webサーバーを開始します。ポート: ", *addr)
