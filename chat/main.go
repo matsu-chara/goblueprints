@@ -16,6 +16,12 @@ import (
 	"github.com/matsu-chara/goblueprints/chat/trace"
 )
 
+var avatars = TryAvatars{
+	UseFileSystemAvatar,
+	UseAuthAvatar,
+	UseGravatarAvatar,
+}
+
 type templateHandler struct {
 	once     sync.Once
 	filename string
@@ -43,7 +49,7 @@ func main() {
 	gomniauth.WithProviders(
 		google.New("744730650722-d59t9ljuu4kne10q7qr6fje6f5i27gmo.apps.googleusercontent.com", "79kS5-Ujkwp_5G4gxwlUmGZ4", "http://localhost:8080/auth/callback/google"),
 	)
-	r := newRoom(UseFileSystemAvatar)
+	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header()["Location"] = []string{"/chat"}
