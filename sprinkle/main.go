@@ -8,6 +8,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/kardianos/osext"
 )
 
 const otherWord = "*"
@@ -36,10 +38,16 @@ func readTransforms(filename string) (transforms, error) {
 }
 
 func main() {
-	t, err := readTransforms("transforms.json")
+	filedir, err := osext.ExecutableFolder()
+	if err != nil {
+		fmt.Printf("get file dir error: %v", err)
+	}
+
+	t, err := readTransforms(filedir + "/transforms.json")
 	if err != nil {
 		fmt.Printf("read transforms error: %v", err)
 	}
+
 	r := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 
 	s := bufio.NewScanner(os.Stdin)
