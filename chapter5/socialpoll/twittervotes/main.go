@@ -10,8 +10,8 @@ var db *mgo.Session
 
 func dialdb() error {
 	var err error
-	log.Println("MongoDBにダイヤル中: 172.17.0.1")
-	db, err = mgo.Dial("172.17.0.1")
+	log.Println("MongoDBにダイヤル中: localhost")
+	db, err = mgo.Dial("localhost")
 	return err
 }
 func closedb() {
