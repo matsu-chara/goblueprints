@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/gomniauth/providers/google"
 	"github.com/stretchr/objx"
 
-	"github.com/matsu-chara/goblueprints/chat/trace"
+	"github.com/matsu-chara/goblueprints/chapter1/chat/trace"
 )
 
 var avatars = TryAvatars{

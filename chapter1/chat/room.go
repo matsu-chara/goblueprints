@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/objx"
 
 	"github.com/gorilla/websocket"
-	"github.com/matsu-chara/goblueprints/chat/trace"
+	"github.com/matsu-chara/goblueprints/chapter1/chat/trace"
 )
 
 type room struct {
