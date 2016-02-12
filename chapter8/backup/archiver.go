@@ -9,7 +9,7 @@ import (
 
 // Archiver .
 type Archiver interface {
-	DestFmt() func(int64) string
+	DestFmt() string
 	Archive(src, dest string) error
 }
 
@@ -50,8 +50,6 @@ func (z *zipper) Archive(src, dest string) error {
 	})
 }
 
-func (z *zipper) DestFmt() func(int64) string {
-	return func(i int64) string {
-		return string(i) + ".zip"
-	}
+func (z *zipper) DestFmt() string {
+	return "%d.zip"
 }
