@@ -18,11 +18,10 @@ func main() {
 		return
 	}
 	meander.APIKey = key
-	http.HandleFunc("/journeys", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/journeys", cors(func(w http.ResponseWriter, r *http.Request) {
 		respond(w, r, meander.Journeys)
-	})
-	http.ListenAndServe(":8080", http.DefaultServeMux)
-	http.HandleFunc("/recommendations", func(w http.ResponseWriter, r *http.Request) {
+	}))
+	http.HandleFunc("/recommendations", cors(func(w http.ResponseWriter, r *http.Request) {
 		q := &meander.Query{
 			Journey: strings.Split(r.URL.Query().Get("journey"), "|"),
 		}
@@ -31,7 +30,8 @@ func main() {
 		q.Radius, _ = strconv.Atoi(r.URL.Query().Get("radius"))
 		places := q.Run()
 		respond(w, r, places)
-	})
+	}))
+	http.ListenAndServe(":8080", http.DefaultServeMux)
 }
 
 func respond(w http.ResponseWriter, r *http.Request, data []interface{}) error {
@@ -40,4 +40,11 @@ func respond(w http.ResponseWriter, r *http.Request, data []interface{}) error {
 		publicData[i] = meander.Public(d)
 	}
 	return json.NewEncoder(w).Encode(publicData)
+}
+
+func cors(f http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		f(w, r)
+	}
 }
